@@ -1,21 +1,36 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { StackNavigator } from './src/navigator';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: 'tomato',
+    accent: 'yellow',
+  },
+};
+
+const FONT_DEFAULT = 'Vollkorn';
 
 export default function App() {
+
+  const [loaded] = useFonts({
+    [FONT_DEFAULT]: require('./assets/fonts/static/Vollkorn-Regular.ttf'),
+    'Vollkorn-Bold': require('./assets/fonts/static/Vollkorn-Bold.ttf'),
+  });
+
+  if (!loaded) return <AppLoading />;
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+      <NavigationContainer>
+        <StatusBar hidden={false} translucent={false} style="inverted" />
+        <PaperProvider theme={theme}>
+          <StackNavigator />
+        </PaperProvider>
+      </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
